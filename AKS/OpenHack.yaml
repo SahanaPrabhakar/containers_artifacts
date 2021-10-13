@@ -1,7 +1,30 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: api
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web
+---
+apiVersion: v1
 kind: Secret
 metadata:  
   name: sql-password
+  namespace: web
+type: Opaque
+data:
+  SQL_PASSWORD: ZkwwcXAzR283
+  SQL_SERVER: c3Fsc2VydmVyYmVnNjEwOS5kYXRhYmFzZS53aW5kb3dzLm5ldA==
+  SQL_USER: c3FsYWRtaW5iRWc2MTA5
+  SQL_DBNAME: bXlkcml2aW5nREI=
+---
+apiVersion: v1
+kind: Secret
+metadata:  
+  name: sql-password
+  namespace: api
 type: Opaque
 data:
   SQL_PASSWORD: ZkwwcXAzR283
@@ -14,6 +37,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   name: tripviewer
+  namespace: web
 spec:
   type: LoadBalancer
   ports:
@@ -31,13 +55,16 @@ metadata:
   labels:
     run: tripviewer 
   name: tripviewer
+  namespace: web
 spec:
   containers:
   - env:
     - name: TRIPS_API_ENDPOINT
-      value: http://trips.default.svc.cluster.local
+      value: http://trips.api.svc.cluster.local
     - name: USERPROFILE_API_ENDPOINT
-      value: http://userprofile.default.svc.cluster.local
+      value: http://userprofile.api.svc.cluster.local
+    - name:  ASPNETCORE_ENVIRONMENT 
+      value: Development
     image: registrybeg6109.azurecr.io/tripviewer:v1
     imagePullPolicy: IfNotPresent
     name: tripsviewer
@@ -57,6 +84,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: trips
+  namespace: api
 spec:
   selector:
     app: trips
@@ -72,6 +100,7 @@ metadata:
   labels:
     app: trips 
   name: trips
+  namespace: api
 spec:
   containers:
   - env:
@@ -105,6 +134,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: userprofile
+  namespace: api
 spec:
   selector:
     app: userprofile
@@ -120,6 +150,7 @@ metadata:
   labels:
     app: userprofile 
   name: userprofile
+  namespace: api
 spec:
   containers:
   - env:
@@ -152,6 +183,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: poi
+  namespace: api
 spec:
   selector:
     app: poi
@@ -167,6 +199,7 @@ metadata:
   labels:
     app: poi 
   name: poi
+  namespace: api
 spec:
   containers:
   - env:
@@ -196,11 +229,26 @@ spec:
   restartPolicy: Always
 ---
 apiVersion: v1
+kind: Service
+metadata:
+  name: user-java
+  namespace: api
+spec:
+  selector:
+    app: user-java
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
 kind: Pod
 metadata:
   labels:
     app: user-java 
   name: user-java
+  namespace: api
 spec:
   containers:
   - env:
@@ -213,13 +261,6 @@ spec:
       - name: sql-password
         mountPath: "/secrets"
         readOnly: true
-    resources:
-      limits:
-        cpu: 500m
-        memory: 250Mi
-      requests:
-        cpu: 100m
-        memory: 50Mi
     ports:
       - containerPort: 80
   volumes:
