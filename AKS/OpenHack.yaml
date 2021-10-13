@@ -24,6 +24,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   name: tripviewer
+  namespace: web
 spec:
   type: LoadBalancer
   ports:
@@ -46,9 +47,9 @@ spec:
   containers:
   - env:
     - name: TRIPS_API_ENDPOINT
-      value: http://trips.default.svc.cluster.local
+      value: http://trips.api.svc.cluster.local
     - name: USERPROFILE_API_ENDPOINT
-      value: http://userprofile.default.svc.cluster.local
+      value: http://userprofile.api.svc.cluster.local
     image: registrybeg6109.azurecr.io/tripviewer:v1
     imagePullPolicy: IfNotPresent
     name: tripsviewer
@@ -68,6 +69,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: trips
+  namespace: api
 spec:
   selector:
     app: trips
@@ -117,6 +119,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: userprofile
+  namespace: api
 spec:
   selector:
     app: userprofile
@@ -165,6 +168,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: poi
+  namespace: api
 spec:
   selector:
     app: poi
@@ -208,6 +212,20 @@ spec:
         secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-java
+  namespace: api
+spec:
+  selector:
+    app: user-java
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
 ---
 apiVersion: v1
 kind: Pod
