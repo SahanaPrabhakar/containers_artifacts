@@ -1,4 +1,14 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: api
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web
+---
+apiVersion: v1
 kind: Secret
 metadata:  
   name: sql-password
@@ -31,6 +41,7 @@ metadata:
   labels:
     run: tripviewer 
   name: tripviewer
+  namespace: web
 spec:
   containers:
   - env:
@@ -72,6 +83,7 @@ metadata:
   labels:
     app: trips 
   name: trips
+  namespace: api
 spec:
   containers:
   - env:
@@ -120,6 +132,7 @@ metadata:
   labels:
     app: userprofile 
   name: userprofile
+  namespace: api
 spec:
   containers:
   - env:
@@ -167,6 +180,7 @@ metadata:
   labels:
     app: poi 
   name: poi
+  namespace: api
 spec:
   containers:
   - env:
@@ -201,6 +215,7 @@ metadata:
   labels:
     app: user-java 
   name: user-java
+  namespace: api
 spec:
   containers:
   - env:
