@@ -26,6 +26,34 @@ status:
   loadBalancer: {}
 ---
 apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: tripviewer 
+  name: tripviewer
+spec:
+  containers:
+  - env:
+    - name: TRIPS_API_ENDPOINT
+      value: http://trips.default.svc.cluster.local
+    - name: USERPROFILE_API_ENDPOINT
+      value: http://userprofile.default.svc.cluster.local
+    image: registrybeg6109.azurecr.io/tripviewer:v1
+    imagePullPolicy: IfNotPresent
+    name: tripsviewer
+    resources:
+      limits:
+        cpu: 500m
+        memory: 250Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    ports:
+      - containerPort: 80
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: trips
@@ -71,34 +99,7 @@ spec:
         secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
----
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    run: tripviewer 
-  name: tripviewer
-spec:
-  containers:
-  - env:
-    - name: TRIPS_API_ENDPOINT
-      value: http://trips.default.svc.cluster.local
-    - name: USERPROFILE_API_ENDPOINT
-      value: http://userprofile.default.svc.cluster.local
-    image: registrybeg6109.azurecr.io/tripviewer:v1
-    imagePullPolicy: IfNotPresent
-    name: tripsviewer
-    resources:
-      limits:
-        cpu: 500m
-        memory: 250Mi
-      requests:
-        cpu: 100m
-        memory: 50Mi
-    ports:
-      - containerPort: 80
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
+
 ---
 apiVersion: v1
 kind: Service
@@ -193,4 +194,37 @@ spec:
         secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
- #just a comment 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: user-java 
+  name: user-java
+spec:
+  containers:
+  - env:
+    - name: OPENAPI_DOCS_URI
+      value: http://changeme
+    image: registrybeg6109.azurecr.io/user-java:v1
+    imagePullPolicy: IfNotPresent
+    name: user-java
+    volumeMounts:
+      - name: sql-password
+        mountPath: "/secrets"
+        readOnly: true
+    resources:
+      limits:
+        cpu: 500m
+        memory: 250Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    ports:
+      - containerPort: 80
+  volumes:
+    - name: sql-password
+      secret:
+        secretName: sql-password
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
