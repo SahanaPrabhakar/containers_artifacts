@@ -99,3 +99,50 @@ spec:
       - containerPort: 80
   dnsPolicy: ClusterFirst
   restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi
+spec:
+  selector:
+    app: poi
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: poi 
+  name: poi
+spec:
+  containers:
+  - env:
+    - name: OPENAPI_DOCS_URI
+      value: http://changeme
+    image: registrybeg6109.azurecr.io/poi:v1
+    imagePullPolicy: IfNotPresent
+    name: poi
+    volumeMounts:
+      - name: sql-password
+        mountPath: "/secrets"
+        readOnly: true
+    resources:
+      limits:
+        cpu: 500m
+        memory: 250Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    ports:
+      - containerPort: 80
+  volumes:
+    - name: sql-password
+      secret:
+        secretName: sql-password
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
