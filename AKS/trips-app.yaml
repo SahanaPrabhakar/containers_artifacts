@@ -84,7 +84,7 @@ spec:
     - name: TRIPS_API_ENDPOINT
       value: http://trips.default.svc.cluster.local
     - name: USERPROFILE_API_ENDPOINT
-      value: http://changeme
+      value: http://userprofile.default.svc.cluster.local
     image: registrybeg6109.azurecr.io/tripviewer:v1
     imagePullPolicy: IfNotPresent
     name: tripsviewer
