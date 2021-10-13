@@ -213,13 +213,6 @@ spec:
       - name: sql-password
         mountPath: "/secrets"
         readOnly: true
-    resources:
-      limits:
-        cpu: 500m
-        memory: 250Mi
-      requests:
-        cpu: 100m
-        memory: 50Mi
     ports:
       - containerPort: 80
   volumes:
