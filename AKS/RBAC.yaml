@@ -65,3 +65,31 @@ subjects:
 - kind: Group
   namespace: web
   name: b4ca164b-7b0d-4739-b8d1-bbf11e1918f4
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-pod-writer
+  namespace: web
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: web-pod-writer
+subjects:
+- kind: Group
+  namespace: web
+  name: b1522872-763a-4100-8081-0d6da206da37
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: api-pod-reader
+  namespace: api
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: api-pod-reader
+subjects:
+- kind: Group
+  namespace: api
+  name: b1522872-763a-4100-8081-0d6da206da37
