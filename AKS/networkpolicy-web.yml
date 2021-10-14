@@ -7,12 +7,17 @@ spec:
   podSelector:
     matchLabels:
       role: frontend
-  ingress: []
-  # egress:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          role: frontend  
+      podSelector:
+        matchLabels:
+          role: frontend
+  # egress: 
   # - to:
   #   - namespaceSelector:
   #       matchLabels:
-  #         purpose: api
-  #     podSelector:
-  #       matchLabels:
   #         role: backend
+      
