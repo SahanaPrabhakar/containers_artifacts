@@ -9,30 +9,6 @@ metadata:
   name: web
 ---
 apiVersion: v1
-kind: Secret
-metadata:  
-  name: sql-password
-  namespace: web
-type: Opaque
-data:
-  SQL_PASSWORD: ZkwwcXAzR283
-  SQL_SERVER: c3Fsc2VydmVyYmVnNjEwOS5kYXRhYmFzZS53aW5kb3dzLm5ldA==
-  SQL_USER: c3FsYWRtaW5iRWc2MTA5
-  SQL_DBNAME: bXlkcml2aW5nREI=
----
-apiVersion: v1
-kind: Secret
-metadata:  
-  name: sql-password
-  namespace: api
-type: Opaque
-data:
-  SQL_PASSWORD: ZkwwcXAzR283
-  SQL_SERVER: c3Fsc2VydmVyYmVnNjEwOS5kYXRhYmFzZS53aW5kb3dzLm5ldA==
-  SQL_USER: c3FsYWRtaW5iRWc2MTA5
-  SQL_DBNAME: bXlkcml2aW5nREI=
----
-apiVersion: v1
 kind: Service
 metadata:
   creationTimestamp: null
@@ -124,8 +100,13 @@ spec:
       - containerPort: 80
   volumes:
     - name: sql-password
-      secret:
-        secretName: sql-password
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "team8-k8s-secrets"
+      #secret:
+        #secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 
@@ -174,8 +155,13 @@ spec:
       - containerPort: 80
   volumes:
     - name: sql-password
-      secret:
-        secretName: sql-password
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "team8-k8s-secrets"
+      #secret:
+       #secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always  
 ---
@@ -223,8 +209,13 @@ spec:
       - containerPort: 80
   volumes:
     - name: sql-password
-      secret:
-        secretName: sql-password
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "team8-k8s-secrets"
+      #secret:
+        #secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 ---
@@ -265,7 +256,12 @@ spec:
       - containerPort: 80
   volumes:
     - name: sql-password
-      secret:
-        secretName: sql-password
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "team8-k8s-secrets"
+      #secret:
+        #secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
