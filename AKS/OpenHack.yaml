@@ -1,13 +1,13 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: api
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: web
----
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: api
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: web
+# ---
 apiVersion: v1
 kind: Service
 metadata:
@@ -86,7 +86,7 @@ spec:
     imagePullPolicy: IfNotPresent
     name: trips
     volumeMounts:
-      - name: sql-password
+      - name: team8-k8s-secrets
         mountPath: "/secrets"
         readOnly: true
     resources:
@@ -99,7 +99,7 @@ spec:
     ports:
       - containerPort: 80
   volumes:
-    - name: sql-password
+    - name: team8-k8s-secrets
       csi:
         driver: secrets-store.csi.k8s.io
         readOnly: true
@@ -141,7 +141,7 @@ spec:
     imagePullPolicy: IfNotPresent
     name: userprofile
     volumeMounts:
-      - name: sql-password
+      - name: team8-k8s-secrets
         mountPath: "/secrets"
         readOnly: true
     resources:
@@ -154,7 +154,7 @@ spec:
     ports:
       - containerPort: 80
   volumes:
-    - name: sql-password
+    - name: team8-k8s-secrets
       csi:
         driver: secrets-store.csi.k8s.io
         readOnly: true
@@ -195,7 +195,7 @@ spec:
     imagePullPolicy: IfNotPresent
     name: poi
     volumeMounts:
-      - name: sql-password
+      - name: team8-k8s-secrets
         mountPath: "/secrets"
         readOnly: true
     resources:
@@ -208,7 +208,7 @@ spec:
     ports:
       - containerPort: 80
   volumes:
-    - name: sql-password
+    - name: team8-k8s-secrets
       csi:
         driver: secrets-store.csi.k8s.io
         readOnly: true
@@ -249,13 +249,13 @@ spec:
     imagePullPolicy: IfNotPresent
     name: user-java
     volumeMounts:
-      - name: sql-password
+      - name: team8-k8s-secrets
         mountPath: "/secrets"
         readOnly: true
     ports:
       - containerPort: 80
   volumes:
-    - name: sql-password
+    - name: team8-k8s-secrets
       csi:
         driver: secrets-store.csi.k8s.io
         readOnly: true
