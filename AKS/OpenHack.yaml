@@ -33,15 +33,19 @@ metadata:
   name: tripviewer
   namespace: web
 spec:
+  nodeSelector:
+    "kubernetes.io/os": linux
   containers:
   - env:
     - name: TRIPS_API_ENDPOINT
       value: http://trips.api.svc.cluster.local
     - name: USERPROFILE_API_ENDPOINT
       value: http://userprofile.api.svc.cluster.local
+    - name: WCF_ENDPOINT
+      value: http://wcf.api.svc.cluster.local
     - name:  ASPNETCORE_ENVIRONMENT 
       value: Development
-    image: registrybeg6109.azurecr.io/tripviewer:v1
+    image: registrybeg6109.azurecr.io/tripviewer2:1.0
     imagePullPolicy: IfNotPresent
     name: tripsviewer
     resources:
@@ -265,3 +269,46 @@ spec:
         #secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: wcf 
+  name: wcf
+  namespace: api
+spec:
+  nodeSelector:
+        "kubernetes.io/os": windows
+  containers:
+  - env:
+     - name: OPENAPI_DOCS_URI
+       value: http://changeme
+    image: registrybeg6109.azurecr.io/wcfservice:1.0
+    imagePullPolicy: IfNotPresent
+    name: wcf    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 250Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    ports:
+      - containerPort: 80  
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wcf
+  namespace: api
+spec:
+  selector:
+    app: wcf
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
