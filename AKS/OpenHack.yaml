@@ -14,6 +14,8 @@ metadata:
   creationTimestamp: null
   name: tripviewer
   namespace: web
+  labels:    
+    role: frontend
 spec:
   type: LoadBalancer
   ports:
@@ -31,6 +33,7 @@ metadata:
   labels:
     run: tripviewer
     role: frontend
+    purpose: web
   name: tripviewer
   namespace: web
 spec:
@@ -66,6 +69,8 @@ kind: Service
 metadata:
   name: trips
   namespace: api
+  labels:    
+    role: backend
 spec:
   selector:
     app: trips
@@ -81,6 +86,7 @@ metadata:
   labels:
     app: trips 
     role: backend
+    purpose: api
   name: trips
   namespace: api
 spec:
@@ -122,6 +128,8 @@ kind: Service
 metadata:
   name: userprofile
   namespace: api
+  labels:    
+    role: backend
 spec:
   selector:
     app: userprofile
@@ -137,6 +145,7 @@ metadata:
   labels:
     app: userprofile 
     role: backend
+    purpose: api
   name: userprofile
   namespace: api
 spec:
@@ -177,6 +186,8 @@ kind: Service
 metadata:
   name: poi
   namespace: api
+  labels:    
+    role: backend
 spec:
   selector:
     app: poi
@@ -192,6 +203,7 @@ metadata:
   labels:
     app: poi 
     role: backend
+    purpose: api
   name: poi
   namespace: api
 spec:
@@ -232,6 +244,8 @@ kind: Service
 metadata:
   name: user-java
   namespace: api
+  labels:    
+    role: backend 
 spec:
   selector:
     app: user-java
@@ -247,6 +261,7 @@ metadata:
   labels:
     app: user-java 
     role: backend
+    purpose: api
   name: user-java
   namespace: api
 spec:

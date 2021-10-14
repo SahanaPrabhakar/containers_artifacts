@@ -8,16 +8,14 @@ spec:
     matchLabels:
       role: backend
   ingress:
-  - from:
-    - namespaceSelector: {}
-      podSelector:
-        matchLabels:
-          role: frontend
-  egress: 
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          purpose: web
-      podSelector:
-        matchLabels:
-          role: frontend
+   - from:     
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            role: blah
+  # egress: 
+  #  - to:
+  #    - namespaceSelector:
+  #        matchLabels:
+  #          role: frontend
+      
