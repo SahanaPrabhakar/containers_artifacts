@@ -1,0 +1,18 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: frontend-policy
+  namespace: web
+spec:
+  podSelector:
+    matchLabels:
+      role: frontend
+  ingress: []
+  # egress:
+  # - to:
+  #   - namespaceSelector:
+  #       matchLabels:
+  #         purpose: api
+  #     podSelector:
+  #       matchLabels:
+  #         role: backend

@@ -29,7 +29,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    run: tripviewer 
+    run: tripviewer
+    role: frontend
   name: tripviewer
   namespace: web
 spec:
@@ -79,6 +80,7 @@ kind: Pod
 metadata:
   labels:
     app: trips 
+    role: backend
   name: trips
   namespace: api
 spec:
@@ -134,6 +136,7 @@ kind: Pod
 metadata:
   labels:
     app: userprofile 
+    role: backend
   name: userprofile
   namespace: api
 spec:
@@ -188,6 +191,7 @@ kind: Pod
 metadata:
   labels:
     app: poi 
+    role: backend
   name: poi
   namespace: api
 spec:
@@ -242,6 +246,7 @@ kind: Pod
 metadata:
   labels:
     app: user-java 
+    role: backend
   name: user-java
   namespace: api
 spec:
@@ -269,46 +274,46 @@ spec:
         #secretName: sql-password
   dnsPolicy: ClusterFirst
   restartPolicy: Always
----
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    app: wcf 
-  name: wcf
-  namespace: api
-spec:
-  nodeSelector:
-        "kubernetes.io/os": windows
-  containers:
-  - env:
-     - name: OPENAPI_DOCS_URI
-       value: http://changeme
-    image: registrybeg6109.azurecr.io/wcfservice:1.0
-    imagePullPolicy: IfNotPresent
-    name: wcf    
-    resources:
-      limits:
-        cpu: 500m
-        memory: 250Mi
-      requests:
-        cpu: 100m
-        memory: 50Mi
-    ports:
-      - containerPort: 80  
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: wcf
-  namespace: api
-spec:
-  selector:
-    app: wcf
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 80
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   labels:
+#     app: wcf 
+#   name: wcf
+#   namespace: api
+# spec:
+#   nodeSelector:
+#         "kubernetes.io/os": windows
+#   containers:
+#   - env:
+#      - name: OPENAPI_DOCS_URI
+#        value: http://changeme
+#     image: registrybeg6109.azurecr.io/wcfservice:1.0
+#     imagePullPolicy: IfNotPresent
+#     name: wcf    
+#     resources:
+#       limits:
+#         cpu: 500m
+#         memory: 250Mi
+#       requests:
+#         cpu: 100m
+#         memory: 50Mi
+#     ports:
+#       - containerPort: 80  
+#   dnsPolicy: ClusterFirst
+#   restartPolicy: Always
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: wcf
+#   namespace: api
+# spec:
+#   selector:
+#     app: wcf
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 80
+#       targetPort: 80
